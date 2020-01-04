@@ -24,16 +24,23 @@ public class funciones {
 			this.funcion = funcion;
 		}
 		public Double evalFun(int x){ // Funcion que tiene por objetivo reemplazar el valor X dentro del string por el valor entregado para luego evaluar dicha funcion.
-			ScriptEngineManager manager = new ScriptEngineManager();
-			ScriptEngine engine = manager.getEngineByName("js"); // Utilizada para evaluar funciones.
-			engine.put("x", x);
-			try {
-					Object operation = engine.eval(this.funcion);
-					return (double)operation;
-			} catch (ScriptException e) {
-					e.printStackTrace();
+			boolean resultado = this.funcion.contains("x");
+			if(resultado){
+					ScriptEngineManager manager = new ScriptEngineManager();
+					ScriptEngine engine = manager.getEngineByName("js"); // Utilizada para evaluar funciones.
+					engine.put("x", x);
+					try {
+							Object operation = engine.eval(this.funcion);
+							return (double)operation;
+					} catch (ScriptException e) {
+							e.printStackTrace();
+					}
+					return (double)0;
+			}else{
+			   	return (double)Integer.parseInt(this.funcion);
 			}
-			return (double)0;
+
+
 		}
 		public Double run(int x,Hashtable<String, Hebra> H ){
 				Double valor = 0.0;
@@ -82,9 +89,8 @@ public class funciones {
 		Scanner scan = new Scanner(mapFile);
 		String linea = ""; // Variable auxiliar para leer las lineas del texto.
 		Hashtable<String, Hebra> H = new Hashtable<String, Hebra>();
-		int flg = 0; // Auxiliar para evitar la primera linea
-
-    		while(scan.hasNextLine()){ // Leemos linea a linea del texto
+		linea = scan.nextLine();
+    while(scan.hasNextLine()){ // Leemos linea a linea del texto
 			linea = scan.nextLine();
 			//variables para el regex
 			final String regex = "[a-z]\\(x\\)=|.*"; // Puede ser una Funcion, un numero o un simbolo.
@@ -97,12 +103,8 @@ public class funciones {
 					//matcher.group() devuelve la coincidencia del último matcher.find()
 					resultado.add(matcher.group());
 			}
-			// Primer caso no nos interesa
-			if(flg!=0){
-				Hebra hilo = new Hebra(resultado.get(1)); // Creamos la hebra con la funcion respectiva
-				H.put(resultado.get(0).substring(0,resultado.get(0).length()-4), hilo); // Le quitamos la seccion (x)= del string
-			}
-			flg=1;
+			Hebra hilo = new Hebra(resultado.get(1)); // Creamos la hebra con la funcion respectiva
+			H.put(resultado.get(0).substring(0,resultado.get(0).length()-4), hilo); // Le quitamos la seccion (x)= del string
 		}
 
 		System.out.println("Funciones Ingresadas !");
@@ -136,7 +138,5 @@ public class funciones {
 			}
 			entradaTeclado = entradaEscaner.nextLine ();
 		}
-
 	}
-
 }
