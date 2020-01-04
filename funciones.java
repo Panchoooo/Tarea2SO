@@ -84,7 +84,7 @@ public class funciones {
 		Hashtable<String, Hebra> H = new Hashtable<String, Hebra>();
 		int flg = 0; // Auxiliar para evitar la primera linea
 
-    while(scan.hasNextLine()){ // Leemos linea a linea del texto
+    		while(scan.hasNextLine()){ // Leemos linea a linea del texto
 			linea = scan.nextLine();
 			//variables para el regex
 			final String regex = "[a-z]\\(x\\)=|.*"; // Puede ser una Funcion, un numero o un simbolo.
